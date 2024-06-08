@@ -1,0 +1,1 @@
+qmk compile -kb splitkb/aurora/lily58 -km dejaypiii_ansi -e CONVERT_TO=liatris
