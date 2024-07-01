@@ -46,7 +46,11 @@ void gol_init(void) {
     memset(&gol_field, 0, GOL_FIELD_SIZE);
 
     time_t t;
-    srand((unsigned)time(&t));
+    if (is_keyboard_master())
+        srand((unsigned)time(&t));
+    else
+        srand((unsigned)time(&t) + 42);
+
     for (size_t x = GOLWIDTH * 0.2; x <= GOLWIDTH * 0.8; ++x) {
         for (size_t y = GOLHEIGHT * 0.2; y <= GOLHEIGHT * 0.8; ++y) {
             if (((double)rand() / RAND_MAX) > LIFE_INIT_RATE) {
