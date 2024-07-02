@@ -63,14 +63,21 @@ void gol_init(void) {
 int eval_next_cell_state(size_t x, size_t y) {
     int neighbors_alive = 0;
 
-    if (gol_field[(x - 1) % GOLWIDTH][(y - 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
-    if (gol_field[x][(y - 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
-    if (gol_field[(x + 1) % GOLWIDTH][(y - 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
-    if (gol_field[(x - 1) % GOLWIDTH][y] == 1) neighbors_alive += 1;
-    if (gol_field[(x + 1) % GOLWIDTH][y] == 1) neighbors_alive += 1;
-    if (gol_field[(x - 1) % GOLWIDTH][(y + 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
-    if (gol_field[x][(y + 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
-    if (gol_field[(x + 1) % GOLWIDTH][(y + 1) % GOLHEIGHT] == 1) neighbors_alive += 1;
+    size_t top    = (y - 1 + GOLHEIGHT) % GOLHEIGHT;
+    size_t midy   = y;
+    size_t bottom = (y + 1) % GOLHEIGHT;
+    size_t left   = (x - 1 + GOLWIDTH) % GOLWIDTH;
+    size_t midx   = x;
+    size_t right  = (x + 1) % GOLWIDTH;
+
+    if (gol_field[left][top] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[midx][top] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[right][top] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[left][midy] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[right][midy] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[left][bottom] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[midx][bottom] == GolCellAlive) neighbors_alive += 1;
+    if (gol_field[right][bottom] == GolCellAlive) neighbors_alive += 1;
 
     /* Rules
         Any live cell with fewer than two live neighbours dies, as if by
