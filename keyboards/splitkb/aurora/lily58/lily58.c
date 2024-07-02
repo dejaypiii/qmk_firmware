@@ -31,9 +31,9 @@ enum layers { _DEFAULT, _LOWER, _RAISE, _ADJUST };
 #    include <stdlib.h>
 #    include <time.h>
 
-#    define GOLWIDTH 64
+#    define GOLWIDTH 32
 #    define GOLHEIGHT 128
-#    define LIFE_INIT_RATE (1.0 - 0.5)
+#    define LIFE_INIT_RATE 0.5
 #    define GolCellDead 0
 #    define GolCellAlive 1
 
@@ -45,14 +45,13 @@ bool gol_next_field[GOLWIDTH][GOLHEIGHT] = {0};
 void gol_init(void) {
     memset(&gol_field, 0, GOL_FIELD_SIZE);
 
-    time_t t;
     if (is_keyboard_master())
-        srand((unsigned)time(&t));
+        srand(timer_read());
     else
-        srand((unsigned)time(&t) + 42);
+        srand(timer_read() + 42);
 
-    for (size_t x = GOLWIDTH * 0.2; x <= GOLWIDTH * 0.8; ++x) {
-        for (size_t y = GOLHEIGHT * 0.2; y <= GOLHEIGHT * 0.8; ++y) {
+    for (size_t x = 8; x < 24; ++x) {
+        for (size_t y = 32; y < 96; ++y) {
             if (((double)rand() / RAND_MAX) > LIFE_INIT_RATE) {
                 gol_field[x][y] = true;
             }
@@ -63,10 +62,10 @@ void gol_init(void) {
 int eval_next_cell_state(size_t x, size_t y) {
     int neighbors_alive = 0;
 
-    size_t top    = (y - 1 + GOLHEIGHT) % GOLHEIGHT;
+    size_t top    = (y - 1) > GOLHEIGHT ? GOLHEIGHT - 1 : y - 1;
     size_t midy   = y;
     size_t bottom = (y + 1) % GOLHEIGHT;
-    size_t left   = (x - 1 + GOLWIDTH) % GOLWIDTH;
+    size_t left   = (x - 1) > GOLWIDTH ? GOLWIDTH - 1 : x - 1;
     size_t midx   = x;
     size_t right  = (x + 1) % GOLWIDTH;
 
